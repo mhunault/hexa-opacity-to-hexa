@@ -1,0 +1,104 @@
+<!--
+User: Hunault Maxime
+Date: 02/07/2024
+Time: 11:51
+-->
+<!--
+User: Hunault Maxime
+Date: 14/06/2024
+Time: 15:54
+-->
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="flex h-screen justify-center items-center flex-col">
+  <div class="rounded-2xl border border-gray-300 max-w-72 mx-auto w-full p-5">
+    <form class="">
+      <div class="mb-5">
+        <div class="relative w-full">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <p class="text-gray-500 dark:text-gray-400">#</p>
+          </div>
+          <label for="hexInput"></label>
+          <input type="text" id="hexInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-[26px] pe-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="E2E2E2" required />
+        </div>
+      </div>
+      <div class="mb-5">
+        <label for="opacitySlider" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" id="opacityValue"></label>
+        <input id="opacitySlider" type="range" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" min="0" max="100" value="50">
+      </div>
+      <div class="relative w-full">
+        <!--            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">-->
+        <!--              <p class="text-gray-500 dark:text-gray-400">#</p>-->
+        <!--            </div>-->
+        <label for="hexColor"></label>
+        <input type="text" id="hexColor" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-[26px] pe-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="E2E2E2" required />
+        <!--            <button type="button" id="copyToClipboard" class="absolute inset-y-0 end-0 flex items-center px-3 hover:cursor-pointer text-gray-500 dark:text-gray-400 border-s border-gray-300">-->
+        <!--              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">-->
+        <!--                <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />-->
+        <!--              </svg>-->
+        <!--            </button>-->
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    const hexInput = document.getElementById('hexInput');
+    const opacitySlider = document.getElementById('opacitySlider');
+    const opacityValue = document.getElementById('opacityValue');
+    // const colorPreview = document.getElementById('colorPreview');
+    // const rgbaColor = document.getElementById('rgbaColor');
+    const hexColor = document.getElementById('hexColor');
+
+    function hexToRgb(hex) {
+      let bigint = parseInt(hex.slice(1), 16);
+      let r = (bigint >> 16) & 255;
+      let g = (bigint >> 8) & 255;
+      let b = bigint & 255;
+      return [r, g, b];
+    }
+
+    function componentToHex(c) {
+      let hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    function updateColor() {
+      const hex = '#' + hexInput.value;
+      console.log(hex)
+      const opacity = opacitySlider.value / 100;
+      if (/^#[0-9A-F]{6}$/i.test(hex)) {
+        const [r, g, b] = hexToRgb(hex);
+        const rgba = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+        // colorPreview.style.backgroundColor = rgba;
+        // rgbaColor.textContent = rgba;
+
+        const alphaHex = componentToHex(Math.round(opacity * 255));
+        const hexWithOpacity = `${hex}${alphaHex.toUpperCase()}`;
+        hexColor.value = hexWithOpacity;
+      } else {
+        // rgbaColor.textContent = 'Invalid hex color';
+        hexColor.value = 'Invalid hex color';
+      }
+      opacityValue.textContent = opacitySlider.value + '%';
+    }
+
+    hexInput.addEventListener('input', updateColor);
+    opacitySlider.addEventListener('input', updateColor);
+    updateColor(); // Initialize with default values
+  });
+</script>
+</body>
+</html>
